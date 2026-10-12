@@ -1,0 +1,491 @@
+{
+  "version": 1,
+  "startDate": "2026-10-05",
+  "timezone": "America/Los_Angeles",
+  "syncedAt": "2026-10-12T14:41:29.953Z",
+  "source": "https://codex-resets.com/tibo-28",
+  "entries": [
+    {
+      "id": "2109430343346581527",
+      "day": 7,
+      "kind": "improvement",
+      "title": "Larger default context for GPT-6.1 Sol",
+      "summary": "GPT-6.1 Sol now defaults to 500k context in Codex and Work, up from 272k, helping reduce compactions and retain context during long tasks.",
+      "url": "https://x.com/thsottiaux/status/2109430343346581527"
+    },
+    {
+      "id": "2109132167112782291",
+      "day": 6,
+      "kind": "reset",
+      "title": "Usage limits reset for everyone",
+      "summary": "“Put the reset in the bag. All propagated.”",
+      "url": "https://x.com/thsottiaux/status/2109132167112782291"
+    },
+    {
+      "id": "2108777962053292398",
+      "day": 5,
+      "kind": "improvement",
+      "title": "Use ChatGPT plans with Devin",
+      "summary": "Users can now connect a personal ChatGPT Go, Plus, or Pro plan to Devin, with GPT model usage drawing from their ChatGPT plan quota.",
+      "url": "https://x.com/thsottiaux/status/2108777962053292398"
+    },
+    {
+      "id": "2108773703064657936",
+      "day": 5,
+      "kind": "improvement",
+      "title": "Dots can delegate Codex work and edit Scheduled Tasks",
+      "summary": "Your dot can now start and follow up on Codex work using context from ChatGPT conversations, Codex threads, and automations. It can also review and edit Scheduled Tasks in ChatGPT Work.",
+      "url": "https://x.com/thsottiaux/status/2108773703064657936"
+    },
+    {
+      "id": "2108645667451318747",
+      "day": 5,
+      "kind": "improvement",
+      "title": "Composer predictions in the Codex desktop app",
+      "summary": "Now available in beta for Pro users, composer predictions suggest your next message based on your conversation and how you communicate with Codex. The feature does not consume plan usage.",
+      "url": "https://x.com/thsottiaux/status/2108645667451318747"
+    },
+    {
+      "id": "2108275041276420573",
+      "day": 4,
+      "kind": "improvement",
+      "title": "Instant steering and GPT-6.1 Sol ultrafast",
+      "summary": "Steering now responds instantly to user adjustments for real-time course correction. GPT-6.1 Sol ultrafast is also rolling out in the API, Codex, and ChatGPT Work.",
+      "url": "https://x.com/thsottiaux/status/2108275041276420573"
+    },
+    {
+      "id": "2108040921044639779",
+      "day": 3,
+      "kind": "reset",
+      "title": "A banked reset for everyone",
+      "summary": "“Confirmed landed across all accounts. How are we doing so far?”",
+      "url": "https://x.com/thsottiaux/status/2108040921044639779"
+    },
+    {
+      "id": "2108084615349170480",
+      "day": 3,
+      "kind": "improvement",
+      "title": "Codex Cloud connects through Tailscale",
+      "summary": "Codex Cloud can now securely connect to resources on your tailnet using Tailscale.",
+      "url": "https://x.com/thsottiaux/status/2108084615349170480"
+    },
+    {
+      "id": "2107912709715132482",
+      "day": 3,
+      "kind": "improvement",
+      "title": "GPT-6 update with Intelligent UI",
+      "summary": "A new GPT-6 version and Intelligent UI are rolling out to everyone in ChatGPT, adding visual, interactive answers and tools for users’ tasks.",
+      "url": "https://x.com/thsottiaux/status/2107912709715132482"
+    },
+    {
+      "id": "2107676072871600470",
+      "day": 2,
+      "kind": "reset",
+      "title": "Usage limits reset for everyone",
+      "summary": "“We shipped four things that were deemed good to great and some math proofs, but the vote is clear and the community demands a reset. I did calibrate it and it *seems* that the game is rigged in reset's favor, but such are the rules at the moment.\n\nTherefore ... the reset has been”",
+      "url": "https://x.com/thsottiaux/status/2107676072871600470"
+    },
+    {
+      "id": "2107574912349303197",
+      "day": 2,
+      "kind": "improvement",
+      "title": "Decisions API is live in public beta",
+      "summary": "Developers can use the Decisions API to pick a model, tool, or action in near real time. It is available to all developers in public beta and decides up to 10x faster than GPT-6 Luna through the Responses API.",
+      "url": "https://x.com/thsottiaux/status/2107574912349303197"
+    },
+    {
+      "id": "2107573405553938664",
+      "day": 2,
+      "kind": "improvement",
+      "title": "Meetings plugin saves notes and next steps",
+      "summary": "The Meetings plugin takes notes and saves a personalized summary and next steps in ChatGPT Space. It is in beta for Pro and Business users in the ChatGPT desktop app on macOS.",
+      "url": "https://x.com/thsottiaux/status/2107573405553938664"
+    },
+    {
+      "id": "2107548725359104441",
+      "day": 2,
+      "kind": "improvement",
+      "title": "Easier qualification for higher API rate limits",
+      "summary": "Paid OpenAI API usage tiers go from five to three: Build, Launch, and Grow. Grow, the new highest tier, now qualifies with $500 in total API payments, down from $1,000.",
+      "url": "https://x.com/thsottiaux/status/2107548725359104441"
+    },
+    {
+      "id": "2107368734981517634",
+      "day": 2,
+      "kind": "improvement",
+      "title": "Free Auto-review for all ChatGPT-signed-in users",
+      "summary": "Auto-review is now free for all users signed in through a ChatGPT account. Enable it in permission settings to have a second agent review actions during long tasks, without drawing usage from your plan.",
+      "url": "https://x.com/thsottiaux/status/2107368734981517634"
+    },
+    {
+      "id": "2107158998495748264",
+      "day": 1,
+      "kind": "improvement",
+      "title": "About 50% faster default speed for GPT-6 Astra and GPT-6.1 Sol",
+      "summary": "Default speed has been optimized across subscription products and partners using Sign in With ChatGPT. The improvement is rolling out within two hours, with no user action needed.",
+      "url": "https://x.com/thsottiaux/status/2107158998495748264"
+    }
+  ],
+  "resets": [
+    {
+      "id": "2109132167112782291",
+      "kind": "regular",
+      "announcedAt": "2026-10-11T04:01:09.000Z",
+      "url": "https://x.com/thsottiaux/status/2109132167112782291"
+    },
+    {
+      "id": "2108040921044639779",
+      "kind": "banked",
+      "announcedAt": "2026-10-08T03:44:55.000Z",
+      "url": "https://x.com/thsottiaux/status/2108040921044639779"
+    },
+    {
+      "id": "2107676072871600470",
+      "kind": "regular",
+      "announcedAt": "2026-10-07T03:35:09.000Z",
+      "url": "https://x.com/thsottiaux/status/2107676072871600470"
+    },
+    {
+      "id": "2106131810921136451",
+      "kind": "regular",
+      "announcedAt": "2026-10-02T21:18:48.000Z",
+      "url": "https://x.com/thsottiaux/status/2106131810921136451"
+    },
+    {
+      "id": "observed-20260929T190000Z",
+      "kind": "banked",
+      "announcedAt": "2026-09-29T19:00:00.000Z",
+      "url": "https://x.com/thsottiaux/status/2105120226027450685"
+    },
+    {
+      "id": "2103911959544610829",
+      "kind": "regular",
+      "announcedAt": "2026-09-26T18:17:54.000Z",
+      "url": "https://x.com/thsottiaux/status/2103911959544610829"
+    },
+    {
+      "id": "2102463847714247142",
+      "kind": "banked",
+      "announcedAt": "2026-09-22T18:23:37.000Z",
+      "url": "https://x.com/thsottiaux/status/2102463847714247142"
+    },
+    {
+      "id": "2098685367058612394",
+      "kind": "regular",
+      "announcedAt": "2026-09-12T08:09:17.000Z",
+      "url": "https://x.com/thsottiaux/status/2098685367058612394"
+    },
+    {
+      "id": "observed-2097043464538264003",
+      "kind": "regular",
+      "announcedAt": "2026-09-08T01:56:57.501Z",
+      "url": "https://x.com/thsottiaux/status/2097174560412246215"
+    },
+    {
+      "id": "2096035437299237298",
+      "kind": "banked",
+      "announcedAt": "2026-09-05T00:39:25.000Z",
+      "url": "https://x.com/thsottiaux/status/2096035437299237298"
+    },
+    {
+      "id": "2095651088502591861",
+      "kind": "banked",
+      "announcedAt": "2026-09-03T23:12:09.000Z",
+      "url": "https://x.com/thsottiaux/status/2095651088502591861"
+    },
+    {
+      "id": "2094251180121854309",
+      "kind": "regular",
+      "announcedAt": "2026-08-31T02:29:25.000Z",
+      "url": "https://x.com/thsottiaux/status/2094251180121854309"
+    },
+    {
+      "id": "2093801758665715784",
+      "kind": "regular",
+      "announcedAt": "2026-08-29T20:43:34.000Z",
+      "url": "https://x.com/thsottiaux/status/2093801758665715784"
+    },
+    {
+      "id": "2093014447833116908",
+      "kind": "regular",
+      "announcedAt": "2026-08-27T16:35:05.000Z",
+      "url": "https://x.com/thsottiaux/status/2093014447833116908"
+    },
+    {
+      "id": "observed-20260825T143200Z",
+      "kind": "regular",
+      "announcedAt": "2026-08-25T14:30:00.000Z",
+      "url": "https://x.com/thsottiaux/status/2092311059197808936"
+    },
+    {
+      "id": "2091688655828246890",
+      "kind": "regular",
+      "announcedAt": "2026-08-24T00:46:51.000Z",
+      "url": "https://x.com/thsottiaux/status/2091688655828246890"
+    },
+    {
+      "id": "2090766694897619318",
+      "kind": "banked",
+      "announcedAt": "2026-08-21T11:43:19.000Z",
+      "url": "https://x.com/thsottiaux/status/2090766694897619318"
+    },
+    {
+      "id": "2087706104814023111",
+      "kind": "regular",
+      "announcedAt": "2026-08-13T01:01:37.000Z",
+      "url": "https://x.com/thsottiaux/status/2087706104814023111"
+    },
+    {
+      "id": "2086972802457063486",
+      "kind": "regular",
+      "announcedAt": "2026-08-11T00:27:44.000Z",
+      "url": "https://x.com/thsottiaux/status/2086972802457063486"
+    },
+    {
+      "id": "2086188036493344823",
+      "kind": "regular",
+      "announcedAt": "2026-08-08T20:29:22.000Z",
+      "url": "https://x.com/thsottiaux/status/2086188036493344823"
+    },
+    {
+      "id": "2083395449814229287",
+      "kind": "regular",
+      "announcedAt": "2026-08-01T03:32:37.000Z",
+      "url": "https://x.com/thsottiaux/status/2083395449814229287"
+    },
+    {
+      "id": "2082317452755751098",
+      "kind": "regular",
+      "announcedAt": "2026-07-29T04:09:02.000Z",
+      "url": "https://x.com/thsottiaux/status/2082317452755751098"
+    },
+    {
+      "id": "2081940052154933696",
+      "kind": "regular",
+      "announcedAt": "2026-07-28T03:09:23.000Z",
+      "url": "https://x.com/thsottiaux/status/2081940052154933696"
+    },
+    {
+      "id": "2081096447718723984",
+      "kind": "regular",
+      "announcedAt": "2026-07-25T19:17:12.000Z",
+      "url": "https://x.com/thsottiaux/status/2081096447718723984"
+    },
+    {
+      "id": "2079609157934886975",
+      "kind": "regular",
+      "announcedAt": "2026-07-21T16:47:15.000Z",
+      "url": "https://x.com/thsottiaux/status/2079609157934886975"
+    },
+    {
+      "id": "2078320950488297917",
+      "kind": "regular",
+      "announcedAt": "2026-07-18T03:28:22.000Z",
+      "url": "https://x.com/thsottiaux/status/2078320950488297917"
+    },
+    {
+      "id": "2077607697487188198",
+      "kind": "regular",
+      "announcedAt": "2026-07-16T04:14:09.000Z",
+      "url": "https://x.com/thsottiaux/status/2077607697487188198"
+    },
+    {
+      "id": "2077114635308986427",
+      "kind": "regular",
+      "announcedAt": "2026-07-14T19:34:54.000Z",
+      "url": "https://x.com/thsottiaux/status/2077114635308986427"
+    },
+    {
+      "id": "2076735790567338203",
+      "kind": "regular",
+      "announcedAt": "2026-07-13T18:29:31.000Z",
+      "url": "https://x.com/thsottiaux/status/2076735790567338203"
+    },
+    {
+      "id": "2076418567143408112",
+      "kind": "regular",
+      "announcedAt": "2026-07-12T21:28:59.000Z",
+      "url": "https://x.com/thsottiaux/status/2076418567143408112"
+    },
+    {
+      "id": "2075820987833274448",
+      "kind": "regular",
+      "announcedAt": "2026-07-11T05:54:25.000Z",
+      "url": "https://x.com/thsottiaux/status/2075820987833274448"
+    },
+    {
+      "id": "2075641131002700120",
+      "kind": "regular",
+      "announcedAt": "2026-07-10T17:59:43.000Z",
+      "url": "https://x.com/thsottiaux/status/2075641131002700120"
+    },
+    {
+      "id": "2075330198887940337",
+      "kind": "regular",
+      "announcedAt": "2026-07-09T21:24:11.000Z",
+      "url": "https://x.com/thsottiaux/status/2075330198887940337"
+    },
+    {
+      "id": "2071740419030053227",
+      "kind": "regular",
+      "announcedAt": "2026-06-29T23:39:41.000Z",
+      "url": "https://x.com/thsottiaux/status/2071740419030053227"
+    },
+    {
+      "id": "2071381664853319742",
+      "kind": "regular",
+      "announcedAt": "2026-06-28T23:54:07.000Z",
+      "url": "https://x.com/thsottiaux/status/2071381664853319742"
+    },
+    {
+      "id": "2070653282440405046",
+      "kind": "regular",
+      "announcedAt": "2026-06-26T23:39:48.000Z",
+      "url": "https://x.com/thsottiaux/status/2070653282440405046"
+    },
+    {
+      "id": "2067399435009622521",
+      "kind": "regular",
+      "announcedAt": "2026-06-18T00:10:10.000Z",
+      "url": "https://x.com/thsottiaux/status/2067399435009622521"
+    },
+    {
+      "id": "2062329981548802523",
+      "kind": "regular",
+      "announcedAt": "2026-06-04T00:25:58.000Z",
+      "url": "https://x.com/thsottiaux/status/2062329981548802523"
+    },
+    {
+      "id": "2061106703446450392",
+      "kind": "regular",
+      "announcedAt": "2026-05-31T15:25:06.000Z",
+      "url": "https://x.com/thsottiaux/status/2061106703446450392"
+    },
+    {
+      "id": "2058280452851638313",
+      "kind": "regular",
+      "announcedAt": "2026-05-23T20:14:35.000Z",
+      "url": "https://x.com/thsottiaux/status/2058280452851638313"
+    },
+    {
+      "id": "2055707616605835333",
+      "kind": "regular",
+      "announcedAt": "2026-05-16T17:51:03.000Z",
+      "url": "https://x.com/thsottiaux/status/2055707616605835333"
+    },
+    {
+      "id": "2048997818673537399",
+      "kind": "regular",
+      "announcedAt": "2026-04-28T05:28:43.000Z",
+      "url": "https://x.com/thsottiaux/status/2048997818673537399"
+    },
+    {
+      "id": "2046367145588916687",
+      "kind": "regular",
+      "announcedAt": "2026-04-20T23:15:21.000Z",
+      "url": "https://x.com/thsottiaux/status/2046367145588916687"
+    },
+    {
+      "id": "2044943514832871564",
+      "kind": "regular",
+      "announcedAt": "2026-04-17T00:58:21.000Z",
+      "url": "https://x.com/thsottiaux/status/2044943514832871564"
+    },
+    {
+      "id": "2042299371602264319",
+      "kind": "regular",
+      "announcedAt": "2026-04-09T17:51:28.000Z",
+      "url": "https://x.com/thsottiaux/status/2042299371602264319"
+    },
+    {
+      "id": "2041655710346572085",
+      "kind": "regular",
+      "announcedAt": "2026-04-07T23:13:48.000Z",
+      "url": "https://x.com/thsottiaux/status/2041655710346572085"
+    },
+    {
+      "id": "2039248564967424483",
+      "kind": "regular",
+      "announcedAt": "2026-04-01T07:48:39.000Z",
+      "url": "https://x.com/thsottiaux/status/2039248564967424483"
+    },
+    {
+      "id": "2037346989244096581",
+      "kind": "regular",
+      "announcedAt": "2026-03-27T01:52:28.000Z",
+      "url": "https://x.com/thsottiaux/status/2037346989244096581"
+    },
+    {
+      "id": "2031605592352313567",
+      "kind": "regular",
+      "announcedAt": "2026-03-11T05:38:13.000Z",
+      "url": "https://x.com/thsottiaux/status/2031605592352313567"
+    },
+    {
+      "id": "2031216405266481489",
+      "kind": "regular",
+      "announcedAt": "2026-03-10T03:51:43.000Z",
+      "url": "https://x.com/thsottiaux/status/2031216405266481489"
+    },
+    {
+      "id": "2030474136024400173",
+      "kind": "regular",
+      "announcedAt": "2026-03-08T02:42:13.000Z",
+      "url": "https://x.com/thsottiaux/status/2030474136024400173"
+    },
+    {
+      "id": "2029308599835738218",
+      "kind": "regular",
+      "announcedAt": "2026-03-04T21:30:47.000Z",
+      "url": "https://x.com/thsottiaux/status/2029308599835738218"
+    },
+    {
+      "id": "2028649088594436225",
+      "kind": "regular",
+      "announcedAt": "2026-03-03T01:50:07.000Z",
+      "url": "https://x.com/thsottiaux/status/2028649088594436225"
+    },
+    {
+      "id": "2004100061933064395",
+      "kind": "regular",
+      "announcedAt": "2025-12-25T08:01:03.000Z",
+      "url": "https://x.com/thsottiaux/status/2004100061933064395"
+    },
+    {
+      "id": "2002137269134819610",
+      "kind": "regular",
+      "announcedAt": "2025-12-19T22:01:37.000Z",
+      "url": "https://x.com/thsottiaux/status/2002137269134819610"
+    },
+    {
+      "id": "2001114683047317723",
+      "kind": "regular",
+      "announcedAt": "2025-12-17T02:18:14.000Z",
+      "url": "https://x.com/thsottiaux/status/2001114683047317723"
+    },
+    {
+      "id": "1995988609896513743",
+      "kind": "regular",
+      "announcedAt": "2025-12-02T22:49:02.000Z",
+      "url": "https://x.com/thsottiaux/status/1995988609896513743"
+    },
+    {
+      "id": "1992370994028388670",
+      "kind": "regular",
+      "announcedAt": "2025-11-22T23:13:56.000Z",
+      "url": "https://x.com/thsottiaux/status/1992370994028388670"
+    },
+    {
+      "id": "1986166501435711936",
+      "kind": "regular",
+      "announcedAt": "2025-11-05T20:19:29.000Z",
+      "url": "https://x.com/thsottiaux/status/1986166501435711936"
+    },
+    {
+      "id": "1968163721034994139",
+      "kind": "regular",
+      "announcedAt": "2025-09-17T04:02:52.000Z",
+      "url": "https://x.com/thsottiaux/status/1968163721034994139"
+    }
+  ]
+}
