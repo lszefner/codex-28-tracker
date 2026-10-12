@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { challengeDay, dayDate } from '../lib/challenge.mjs';
 import ResetHistory from './reset-history';
+import LabUpdates from './lab-updates';
 
 function Icon({ type }) {
   return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">{type === 'sun' ? <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></> : type === 'telegram' ? <path d="m3 11 18-7-4 16-5-5-3 3v-5l9-6-11 5Z" /> : <path d="m7 10 5 5 5-5" />}</svg>;
@@ -21,12 +22,13 @@ export default function Dashboard({ data, mode, bot }) {
   return <div className={light ? 'site light' : 'site'}>
     <a className="skip" href="#daily-log">Skip to daily log</a>
     <div className="wrap">
-      <header><a className="brand" href="/">Codex <span>28</span></a><nav aria-label="Utilities"><a className="circle" href="https://x.com/thsottiaux" target="_blank" rel="noreferrer" aria-label="Tibo on X"><svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.5" aria-hidden="true"><path d="m4 3 16 18h-4L4 3h4l12 18M20 3 4 21" /></svg></a><button className="circle" onClick={() => setLight(!light)} aria-label={light ? 'Use dark theme' : 'Use light theme'}><Icon type="sun" /></button></nav></header>
+      <header><a className="brand" href="/">AI <span>Ship Log</span></a><nav aria-label="Utilities"><a className="circle" href="https://x.com/thsottiaux" target="_blank" rel="noreferrer" aria-label="Tibo on X"><svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.5" aria-hidden="true"><path d="m4 3 16 18h-4L4 3h4l12 18M20 3 4 21" /></svg></a><button className="circle" onClick={() => setLight(!light)} aria-label={light ? 'Use dark theme' : 'Use light theme'}><Icon type="sun" /></button></nav></header>
       <main>
         <section className="hero" aria-labelledby="title">
           <div><h1 id="title">Tibo’s <span>28-day challenge</span></h1><p className="promise">One clear improvement. Or a full reset.<br />Every day, for 28 days.</p><p className="hero-note">Follow what ships for Codex and Work, one day at a time.</p><a className="author" href="https://x.com/thsottiaux/status/2106845241357824205" target="_blank" rel="noreferrer">The original challenge <span>@thsottiaux ↗</span></a></div>
           <aside className="calendar" aria-label="Challenge day in Pacific time"><div className="rings"><i /><i /></div><div className="calendar-top">{now ? now.toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', month: 'short', day: 'numeric' }) : 'PACIFIC TIME'}</div><div className="calendar-body"><span>DAY</span><strong>{current ? String(current).padStart(2, '0') : '—'}</strong><time>{now ? now.toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit' }) : 'Loading clock'}</time><small>{actualDay > 28 ? 'CHALLENGE COMPLETE' : actualDay < 1 ? 'STARTS OCT 5' : 'TIBO’S TIME · PT'}</small></div></aside>
         </section>
+        <LabUpdates updates={data.updates || []} mode={mode} />
         <ResetHistory resets={data.resets || []} now={now} syncedAt={data.syncedAt} mode={mode} />
         <section className="telegram" aria-label="Telegram notifications"><div><h2>A little update, when something ships.</h2><p>Get improvements and resets in Telegram. Short messages, original sources.</p></div>{bot ? <a className="telegram-button" href={`https://t.me/${bot}?start=subscribe`}><Icon type="telegram" /> Get updates</a> : <span className="setup-badge">Telegram coming soon</span>}</section>
         <section id="daily-log" aria-labelledby="log-title"><div className="log-heading"><h2 id="log-title">Daily log</h2><div className="legend"><span><i className="marker improvement" /> Improvement</span><span><i className="marker reset" /> Reset</span></div></div>
