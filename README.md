@@ -14,8 +14,12 @@ The webhook contract is version 1: `startDate: "2026-10-05"`, `timezone: "Americ
 
 ## Current verification
 
-Production build and date/validation assertions pass. Reset filtering was checked in the browser. Desktop and 390px mobile screenshots are in the sibling screenshots directory; mobile had no horizontal overflow. Telegram and live n8n data are not connected yet.
+Production build and date/validation assertions pass. Reset-day drilldown and source filtering were checked in the browser. Updated desktop and 390px mobile screenshots are in the sibling screenshots directory; mobile had no horizontal overflow.
+
+Telegram bot: @liam_ai_ship_log_bot. Its command menu and welcome description are saved, and the Telegram credential passes n8n's connection test. Live message handling is not verified yet. Groq is intentionally awaiting the user's key.
+
+n8n drafts: Fetch sources `FERgY06D2N26gkmE`, Collector `ofbDds5WWet8qEjg`. The source parser was locally checked against 15 challenge entries and 60 resets by n8n's builder; live workflow execution and the production webhook still need verification. Vercel deployment is pending account connection.
 
 Preview content is attributed to https://codex-resets.com/tibo-28. Display font is Baloo 2 ExtraBold, sourced from the reference site's public font asset (Baloo 2 is distributed under the SIL Open Font License). This is an unofficial community dashboard.
 
-Additional webhook fields: `resets` contains `id`, `kind` (`regular` or `banked`), `announcedAt`, `url`; `updates` contains `id`, `author`, `lab`, `kind` (`post`, `improvement`, or `reset`), `title`, `summary`, `announcedAt`, `url`. Only the three configured sources are accepted. The frontend caches the n8n feed for one hour; n8n collection runs every four hours.
+Additional webhook fields: `resets` contains `id`, `kind` (`regular` or `banked`), `announcedAt`, `url`; `updates` contains `id`, `author`, `lab`, `kind` (`post`, `improvement`, or `reset`), `title`, `summary`, `announcedAt`, `url`. Only the three configured sources are accepted. The frontend caches the n8n feed for one hour; the collector is configured for every four hours but is not active yet.
