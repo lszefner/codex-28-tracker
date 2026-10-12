@@ -1,6 +1,8 @@
-# AI Ship Log
+# Codex News
 
-Next.js dashboard for lab updates, Tibo’s 28-day challenge, and Codex reset history. Backend processing belongs in n8n. Sources: @thsottiaux (OpenAI), @bcherny (Anthropic), and @poteto (xAI). The 28-day challenge and reset history remain specific to Tibo.
+Next.js dashboard for Tibo’s 28-day challenge and Codex reset history. Only @thsottiaux is in scope. Backend processing and persistence belong in n8n.
+
+Telegram alerts use confirmed resets and curated challenge improvements only. Raw Tibo posts, including replies and reposts, are collected for daily recaps and questions. They must never become alerts just because they contain a keyword. Alert preferences are all, improvements, resets, or off; daily recaps use Pacific calendar dates and disclose collection freshness and gaps.
 
 ## Run
 
@@ -16,10 +18,10 @@ The webhook contract is version 1: `startDate: "2026-10-05"`, `timezone: "Americ
 
 Production build and date/validation assertions pass. Reset-day drilldown and source filtering were checked in the browser. Updated desktop and 390px mobile screenshots are in the sibling screenshots directory; mobile had no horizontal overflow.
 
-Telegram bot: @liam_ai_ship_log_bot. Its command menu and welcome description are saved, and the Telegram credential passes n8n's connection test. Live message handling is not verified yet. Groq is intentionally awaiting the user's key.
+Telegram bot display name: Codex News; existing username: @liam_ai_ship_log_bot. Its revised command menu and welcome description are saved, and the Telegram credential passes n8n's connection test. Live message handling is not verified yet. Groq is intentionally awaiting the user's key.
 
-n8n drafts: Fetch sources `FERgY06D2N26gkmE`, Collector `ofbDds5WWet8qEjg`. The source parser was locally checked against 15 challenge entries and 60 resets by n8n's builder; live workflow execution and the production webhook still need verification. Vercel deployment is pending account connection.
+n8n drafts: Fetch sources `FERgY06D2N26gkmE`, Collector `ofbDds5WWet8qEjg`, Dashboard API `wPSgfypUvRgrTUWe`, Telegram `2QUT6zUrfjGbBf4i`. The backend is being revised for Tibo-only collection, quiet alerts, and full daily recaps. The workflows have simulated checks; live acceptance is pending. The dashboard is deployed on Vercel Hobby at https://tibo-news.vercel.app. The requested codexnews.vercel.app alias was unavailable; the user selected tibo-news.vercel.app.
 
 Preview content is attributed to https://codex-resets.com/tibo-28. Display font is Baloo 2 ExtraBold, sourced from the reference site's public font asset (Baloo 2 is distributed under the SIL Open Font License). This is an unofficial community dashboard.
 
-Additional webhook fields: `resets` contains `id`, `kind` (`regular` or `banked`), `announcedAt`, `url`; `updates` contains `id`, `author`, `lab`, `kind` (`post`, `improvement`, or `reset`), `title`, `summary`, `announcedAt`, `url`. Only the three configured sources are accepted. The frontend caches the n8n feed for one hour; the collector is configured for every four hours but is not active yet.
+Additional webhook fields: `resets` contains `id`, `kind` (`regular` or `banked`), `announcedAt`, `url`; `updates` contains `id`, `author`, `lab`, `kind` (`post`, `improvement`, or `reset`), `title`, `summary`, `announcedAt`, `url`. Only Tibo is accepted. The frontend caches the n8n feed for one hour; collection scheduling and activation still need live verification.
