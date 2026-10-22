@@ -62,7 +62,8 @@ const parse = text => run(bot, 'Parse Message & Build Reply', [], {
   'Telegram Message': [{ message: { chat: { id: 123 }, text } }],
   'Get Cached Records': [], 'Get Sync State': [],
 })[0];
-assert.match(parse('/today banana').reply, /Usage:/);
+assert.equal(parse('/today banana').reply, 'Usage: /today or /today &lt;positive page number&gt;.');
+assert.doesNotMatch(parse('/today banana').reply, /[<>]/);
 assert.match(parse('/today 0').reply, /Usage:/);
 assert.match(parse('/alerts nonsense').reply, /Choose/);
 assert.match(parse('/unknown').reply, /Try/);

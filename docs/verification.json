@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-22T12:31:38Z",
+  "verifiedAt": "2026-10-22T12:37:48.598Z",
   "scope": "n8n Cloud; Docker self-hosting excluded by user",
   "collection": {
     "executionId": "393",
@@ -45,8 +45,12 @@
   },
   "botUpdatedVersion": {
     "workflowId": "2QUT6zUrfjGbBf4i",
-    "versionId": "86ba9215-fd80-4855-821f-22ddc15b80b6",
-    "telegramRoundTrip": "awaiting user messages; no incoming update fabricated"
+    "versionId": "57a1d80f-b8f4-410d-8b1e-8e57dae34a03",
+    "telegramRoundTrip": "verified through the real Mac Telegram app and n8n executions",
+    "resetCommand": { "executionId": "396", "status": "success", "telegramAccepted": true, "visibleInChat": true },
+    "cachingQuestion": { "executionId": "397", "status": "success", "schemaAccepted": true, "sourceUrl": "https://x.com/thsottiaux/status/2112712984644784534", "telegramAccepted": true, "visibleInChat": true },
+    "invalidPageCommand": { "executionId": "400", "status": "success", "telegramAccepted": true, "visibleInChat": true, "reply": "Usage: /today or /today <positive page number>." },
+    "formattingRegression": { "failedExecutionId": "398", "errorHandlerExecutionId": "399", "cause": "Unescaped usage placeholder interpreted as a Telegram HTML tag", "fix": "Reuse the existing HTML escape helper", "retryExecutionId": "400" }
   },
   "automatedChecks": [
     "npm test",

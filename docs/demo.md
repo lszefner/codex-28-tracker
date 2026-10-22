@@ -52,5 +52,5 @@ A manual editor execution shows the error but does not automatically prove the p
 
 - The live provider test used the same Groq prompt and validator with a fixed, labelled source fixture. Execution 390 passed; the temporary test workflow was archived.
 - Automated tests run the exported Code-node logic for input validation, malformed model output, unknown source URLs, fallback routing, invalid commands and repeat delivery.
-- A real Telegram round trip on the updated version remains a presentation preflight: send the two messages above and confirm their responses in the same chat.
+- Real Telegram messages were sent through the Mac app on October 22: `/reset` succeeded in execution 396; “What changed about caching?” passed AI validation and delivered a cited answer in execution 397. `/today banana` exposed an unescaped HTML placeholder (398), which also exercised the shared error handler (399). After escaping the hint with the existing helper, the repeated command delivered the expected usage reply (400). All replies and the failure alert were visible in the private chat.
 - Docker self-hosting is outside the agreed scope. Historical commits were not backdated.
