@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-22T12:37:48.598Z",
+  "verifiedAt": "2026-10-22T12:46:38.463Z",
   "scope": "n8n Cloud; Docker self-hosting excluded by user",
   "collection": {
     "executionId": "393",
@@ -19,20 +19,32 @@
   "fetchInputMaxPosts": 10,
   "errorDemo": {
     "workflowId": "Ki7vTGUA0JqJ0ysl",
-    "executionId": "388",
+    "executionId": "406",
     "status": "expected failure",
     "executionMode": "trigger",
-    "url": "https://liamszefner.app.n8n.cloud/workflow/Ki7vTGUA0JqJ0ysl/executions/388",
-    "normallyPublished": false
+    "url": "https://liamszefner.app.n8n.cloud/workflow/Ki7vTGUA0JqJ0ysl/executions/406",
+    "normallyPublished": false,
+    "previousExecutionId": "388",
+    "versionId": "1a597875-6cf2-46f5-abd8-eec0fb92e17f",
+    "automaticScheduleVerified": true,
+    "intervalMinutesWhilePublished": 1,
+    "unpublishedAfterVerification": true,
+    "manualEditorRunsDoNotAlert": [
+      "401",
+      "402",
+      "403"
+    ]
   },
   "notification": {
     "workflowId": "4kOLlblt8pZ8LA8l",
-    "executionId": "389",
+    "executionId": "407",
     "executionMode": "error",
     "status": "success",
     "telegramAccepted": true,
     "recipient": "agreed private chat",
-    "rawErrorBodyForwarded": false
+    "rawErrorBodyForwarded": false,
+    "previousExecutionId": "389",
+    "visibleInTelegramApp": true
   },
   "modelTest": {
     "workflowId": "GOEMqR5L4VXLQbES",

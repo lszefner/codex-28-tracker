@@ -27,18 +27,22 @@ Specifications/architecture stay below two minutes; total stays between five and
 
 ## Repeating the controlled failure
 
-The isolated Failure demo uses a reserved `.invalid` hostname. It cannot write announcements or send news alerts. Its schedule is January 1 as a safety measure, and the workflow is normally unpublished.
+The isolated Failure demo uses a reserved `.invalid` hostname. It cannot write announcements or send news alerts. It runs every minute **while published**, so leave it unpublished between demonstrations.
 
-Using the n8n MCP:
-1. Publish workflow `Ki7vTGUA0JqJ0ysl`.
-2. Execute it with `executionMode: "production"` and `triggerNodeName: "Failure Demo Only"`.
-3. Read the failed execution and the resulting Error handler execution.
-4. Confirm the alert in your private Telegram chat.
-5. Unpublish the Failure demo again, including if a check fails.
+Using the n8n UI:
+1. Open **Codex News – Failure demo** and click **Publish**.
+2. Wait for the next scheduled run (about one minute, plus retries). Do not click **Execute Workflow** to test the automatic alert.
+3. Open **Executions**: the automatic run should fail at **Intentional Bad URL**.
+4. Confirm the matching failure alert in your private Codex News Telegram chat, and the successful **Codex News – Error handler** execution.
+5. **Unpublish** the Failure demo immediately afterward. Leaving it published sends another alert every minute.
+
+For an immediate test using the n8n MCP, publish workflow `Ki7vTGUA0JqJ0ysl`, execute with `executionMode: "production"` and `triggerNodeName: "Publish to test - every minute"`, inspect both executions and the private alert, then unpublish in all cases.
 
 You can ask Codex: “Run the isolated failure demo through n8n MCP, verify the private error alert, and unpublish the demo afterward.”
 
-A manual editor execution shows the error but does not automatically prove the production Error Trigger integration. The recorded proof used production execution mode. Do not damage a live credential or edit the operating Collector to demonstrate a failure.
+**Why the editor button does not send the alert:** n8n's Error Trigger runs for automatic/production failures, not manual editor executions. The **Editor test - no Telegram alert** trigger is only for inspecting the deliberate failure. Manual executions 401–403 confirmed this distinction; no handler executions were expected for them. Publishing alone previously also waited until January 1; the revised one-minute schedule makes the UI demonstration repeatable.
+
+Do not damage a live credential or edit the operating Collector to demonstrate a failure.
 
 ## Investigating a real problem
 

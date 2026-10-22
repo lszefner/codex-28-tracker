@@ -4,7 +4,7 @@
   "nodes": [
     {
       "id": "9a493944-e2c0-44c5-8dd8-7a681a0d2aba",
-      "name": "Failure Demo Only",
+      "name": "Publish to test - every minute",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.4,
       "position": [
@@ -15,8 +15,8 @@
         "rule": {
           "interval": [
             {
-              "field": "cronExpression",
-              "expression": "0 0 0 1 1 *"
+              "field": "minutes",
+              "minutesInterval": 1
             }
           ]
         }
@@ -57,7 +57,7 @@
     },
     {
       "id": "be565927-662a-45c6-a234-7f6c8f3c99d1",
-      "name": "Inspect Failure Manually",
+      "name": "Editor test - no Telegram alert",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
@@ -68,17 +68,6 @@
     }
   ],
   "connections": {
-    "Failure Demo Only": {
-      "main": [
-        [
-          {
-            "node": "Intentional Bad URL",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Intentional Bad URL": {
       "main": [
         [
@@ -90,7 +79,18 @@
         ]
       ]
     },
-    "Inspect Failure Manually": {
+    "Publish to test - every minute": {
+      "main": [
+        [
+          {
+            "node": "Intentional Bad URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Editor test - no Telegram alert": {
       "main": [
         [
           {
@@ -110,7 +110,7 @@
     "executionTimeout": 60
   },
   "active": false,
-  "versionId": "0f4978a0-1704-45c7-86b7-0053e178c2f9",
+  "versionId": "1a597875-6cf2-46f5-abd8-eec0fb92e17f",
   "activeVersionId": null,
   "nodeGroups": []
 }
