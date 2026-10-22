@@ -6,7 +6,7 @@ Telegram alerts use confirmed resets and curated challenge improvements only. Ra
 
 ## Run
 
-`npm install`, then `npm run dev`. Production checks: `node lib/challenge.test.mjs` and `npm run build`.
+`npm install`, then `npm run dev`. Checks: `npm test` and `npm run build`.
 
 ## Connect
 
@@ -27,3 +27,15 @@ Preview content is attributed to https://codex-resets.com/tibo-28. Display font 
 Additional webhook fields: `resets` contains `id`, `kind` (`regular` or `banked`), `announcedAt`, `url`; `updates` contains `id`, `author`, `lab`, `kind` (`post`, `improvement`, or `reset`), `title`, `summary`, `announcedAt`, `url`. Only Tibo is accepted. The frontend and dashboard API cache the n8n feed for 60 seconds. Visible pages refresh their server data every minute and on returning to the tab, preserving filters and scroll position. The collector schedule is published and active every 15 minutes. Apify uses one latest search (`from:thsottiaux`) capped at 10 results, an n8n Header Auth credential restricted to api.apify.com, maxTotalChargeUsd 0.05, and timeout 120. A filled 10-post window records a partial-coverage warning; previously collected posts remain stored. Bursts of more than 10 posts between polls can leave recap gaps. More frequent collection still consumes more monthly runs/quota.
 
 Production settings `N8N_CHALLENGE_URL` and `NEXT_PUBLIC_TELEGRAM_BOT` are persisted in Vercel, so redeployments retain the live feed and existing bot link. Freshness changes verified on Oct 21, 2026 with the production build, refresh lifecycle assertions, and the live API cache header.
+
+## Checklist readiness — October 22, 2026
+
+Current n8n exports are committed in `workflows/`, including the shared Error handler and isolated Failure demo. All external calls have three total tries with a two-second wait. The four operating workflows link to the shared Error handler, which sends workflow metadata and an execution URL to the agreed private Telegram chat. The handler does not forward raw error bodies or credential values.
+
+Fetch sources declares and validates a numeric `maxPosts` input from 1 to 10; Collector supplies 10. AI responses must pass a JSON shape, length and context-source check before delivery. Rejected output and provider failures route to a cached fallback. Delivery logs now use upsert for retry safety. `/today` rejects invalid page arguments with usage guidance.
+
+Read [architecture and contracts](docs/architecture.md), the [six-minute demo and failure-test runbook](docs/demo.md), the [question bank](docs/rehearsal.md), and [verification evidence](docs/verification.json). Docker self-hosting is outside this version's agreed scope.
+
+## Reproduce the n8n setup
+
+Import the JSON files from `workflows/` into your own n8n instance, recreate the four Data Tables using the columns shown in the Data Table nodes, and reselect their local table IDs. Create your own Telegram, Apify Header Auth and Groq credentials in n8n; exports contain credential references rather than secret values. Set Error handler's private chat recipient, publish it, and reselect it in each operating workflow's Error workflow setting. Reselect Fetch sources in Collector's Execute Workflow node. Publish the four operating workflows. Leave Failure demo unpublished except during a controlled test. Configure the frontend's environment variables described above. On a different instance, workflow, table and credential IDs must be remapped; importing JSON alone does not provision provider accounts or table contents.

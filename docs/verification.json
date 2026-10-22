@@ -1,0 +1,67 @@
+{
+  "verifiedAt": "2026-10-22T12:31:38Z",
+  "scope": "n8n Cloud; Docker self-hosting excluded by user",
+  "collection": {
+    "executionId": "393",
+    "status": "success",
+    "subExecutionId": "394",
+    "sourceCounts": {
+      "entries": 28,
+      "resets": 64,
+      "updates": 10,
+      "apifyPosts": 10
+    },
+    "sync": "2026-10-22T12:31:17.574Z",
+    "coverageWarnings": [
+      "Apify latest-10 post window filled; daily post coverage may be partial"
+    ]
+  },
+  "fetchInputMaxPosts": 10,
+  "errorDemo": {
+    "workflowId": "Ki7vTGUA0JqJ0ysl",
+    "executionId": "388",
+    "status": "expected failure",
+    "executionMode": "trigger",
+    "url": "https://liamszefner.app.n8n.cloud/workflow/Ki7vTGUA0JqJ0ysl/executions/388",
+    "normallyPublished": false
+  },
+  "notification": {
+    "workflowId": "4kOLlblt8pZ8LA8l",
+    "executionId": "389",
+    "executionMode": "error",
+    "status": "success",
+    "telegramAccepted": true,
+    "recipient": "agreed private chat",
+    "rawErrorBodyForwarded": false
+  },
+  "modelTest": {
+    "workflowId": "GOEMqR5L4VXLQbES",
+    "executionId": "390",
+    "status": "success",
+    "kind": "live Groq call using a fixed labelled source fixture",
+    "schemaAccepted": true,
+    "temporaryWorkflowArchived": true,
+    "telegramDeliveryTest": false
+  },
+  "botUpdatedVersion": {
+    "workflowId": "2QUT6zUrfjGbBf4i",
+    "versionId": "86ba9215-fd80-4855-821f-22ddc15b80b6",
+    "telegramRoundTrip": "awaiting user messages; no incoming update fabricated"
+  },
+  "automatedChecks": [
+    "npm test",
+    "npm run build",
+    "git diff --check",
+    "common credential-pattern scan of working tree and Git history"
+  ],
+  "history": {
+    "priorCommitDate": "2026-10-12",
+    "newCommitDate": "2026-10-22",
+    "historyRewritten": false
+  },
+  "limitations": [
+    "Schema checks and allowed source links do not prove every generated sentence is factually correct.",
+    "A successful Telegram send followed by failed logging can still be repeated.",
+    "The latest-ten window can miss bursts and monthly quotas still apply."
+  ]
+}
