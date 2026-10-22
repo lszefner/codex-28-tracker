@@ -39,7 +39,10 @@
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
-      "onError": "continueRegularOutput"
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -71,7 +74,10 @@
       ],
       "executeOnce": true,
       "alwaysOutputData": true,
-      "onError": "continueRegularOutput"
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -254,10 +260,11 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": true
+    "availableInMCP": true,
+    "errorWorkflow": "4kOLlblt8pZ8LA8l"
   },
   "active": true,
-  "versionId": "4203158b-0292-4175-a980-b7ebd4ba7ff8",
-  "activeVersionId": "4203158b-0292-4175-a980-b7ebd4ba7ff8",
+  "versionId": "1bbd30e6-1568-4676-a2c1-9e2c526d6878",
+  "activeVersionId": "1bbd30e6-1568-4676-a2c1-9e2c526d6878",
   "nodeGroups": []
 }

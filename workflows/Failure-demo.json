@@ -1,0 +1,116 @@
+{
+  "id": "Ki7vTGUA0JqJ0ysl",
+  "name": "Codex News – Failure demo",
+  "nodes": [
+    {
+      "id": "9a493944-e2c0-44c5-8dd8-7a681a0d2aba",
+      "name": "Failure Demo Only",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 0 1 1 *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "16079edc-afff-4f52-9f4d-6ac7763febe6",
+      "name": "Intentional Bad URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        96
+      ],
+      "parameters": {
+        "url": "https://codex-news-demo.invalid/intentional-failure",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "stopWorkflow"
+    },
+    {
+      "id": "5467f34c-c42d-40c9-a864-6a879f49de24",
+      "name": "Stop Expected Demo",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        448,
+        96
+      ],
+      "parameters": {
+        "errorMessage": "EXPECTED DEMO FAILURE: isolated test; production collection is unaffected."
+      }
+    },
+    {
+      "id": "be565927-662a-45c6-a234-7f6c8f3c99d1",
+      "name": "Inspect Failure Manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        192
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Failure Demo Only": {
+      "main": [
+        [
+          {
+            "node": "Intentional Bad URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intentional Bad URL": {
+      "main": [
+        [
+          {
+            "node": "Stop Expected Demo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inspect Failure Manually": {
+      "main": [
+        [
+          {
+            "node": "Intentional Bad URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "errorWorkflow": "4kOLlblt8pZ8LA8l",
+    "saveDataErrorExecution": "all",
+    "executionTimeout": 60
+  },
+  "active": false,
+  "versionId": "0f4978a0-1704-45c7-86b7-0053e178c2f9",
+  "activeVersionId": null,
+  "nodeGroups": []
+}

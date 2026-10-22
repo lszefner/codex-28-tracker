@@ -32,6 +32,25 @@
         },
         "options": {
           "waitForSubWorkflow": true
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "maxPosts": 10
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "maxPosts",
+              "displayName": "maxPosts",
+              "type": "number",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false
         }
       },
       "id": "838304eb-c10b-446f-9174-b60e3e0723fd",
@@ -42,7 +61,10 @@
         320,
         528
       ],
-      "executeOnce": true
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {},
@@ -109,7 +131,10 @@
         528
       ],
       "executeOnce": true,
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -309,7 +334,10 @@
       "position": [
         1296,
         528
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -427,7 +455,10 @@
         1520,
         528
       ],
-      "executeOnce": true
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -470,7 +501,10 @@
         1600,
         624
       ],
-      "executeOnce": true
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -492,7 +526,10 @@
         624
       ],
       "executeOnce": true,
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -525,8 +562,8 @@
         624
       ],
       "retryOnFail": true,
-      "maxTries": 2,
-      "waitBetweenTries": 3000,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
       "webhookId": "146195fe-cb00-451a-8e7f-4aaa9b6951f7",
       "onError": "continueErrorOutput",
       "credentials": {
@@ -602,7 +639,17 @@
             }
           ]
         },
-        "options": {}
+        "options": {},
+        "operation": "upsert",
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "delivery_key",
+              "keyValue": "={{ $('Build Pending Deliveries').item.json.delivery_key }}"
+            }
+          ]
+        }
       },
       "id": "fcbba8ab-e5c2-40d4-87d5-d0f078e0fdb7",
       "name": "Log Sent Delivery",
@@ -611,7 +658,10 @@
       "position": [
         2496,
         528
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -679,7 +729,17 @@
             }
           ]
         },
-        "options": {}
+        "options": {},
+        "operation": "upsert",
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "delivery_key",
+              "keyValue": "={{ $('Build Pending Deliveries').item.json.delivery_key }}"
+            }
+          ]
+        }
       },
       "id": "6ccb8ec9-f9f9-49aa-a92f-8e9119e2aab6",
       "name": "Log Failed Delivery",
@@ -688,7 +748,10 @@
       "position": [
         2496,
         720
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     },
     {
       "parameters": {
@@ -755,7 +818,23 @@
       "position": [
         768,
         528
-      ]
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "id": "9dcff4a4-a84d-498a-8c21-dab1554b6fbe",
+      "name": "Stop Failed Collection",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        832
+      ],
+      "parameters": {
+        "errorMessage": "Collection failed: no usable announcement or reset source. See codex28_sync_state and this execution."
+      }
     }
   ],
   "connections": {
@@ -915,16 +994,28 @@
           }
         ]
       ]
+    },
+    "Record Fetch Error": {
+      "main": [
+        [
+          {
+            "node": "Stop Failed Collection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": true
+    "availableInMCP": true,
+    "errorWorkflow": "4kOLlblt8pZ8LA8l"
   },
   "active": true,
-  "versionId": "58910d8b-ff9c-4b0e-a88a-5887c6121040",
-  "activeVersionId": "58910d8b-ff9c-4b0e-a88a-5887c6121040",
+  "versionId": "1e122543-50de-4899-8542-83ea950812ba",
+  "activeVersionId": "1e122543-50de-4899-8542-83ea950812ba",
   "nodeGroups": [
     {
       "id": "da39a454-709b-4024-bf0f-bf4db1240c7c",

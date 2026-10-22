@@ -1,0 +1,68 @@
+{
+  "id": "4kOLlblt8pZ8LA8l",
+  "name": "Codex News – Error handler",
+  "nodes": [
+    {
+      "id": "f867f713-abe0-4f30-a33f-ef197c4758ec",
+      "name": "Workflow Failed",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "7154bdc9-bbeb-4487-b61c-1cb7785d0d21",
+      "name": "Notify Liam",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "7732131200",
+        "text": "={{ '[Codex News failure]\\nWorkflow: ' + ($json.workflow?.name || 'Unknown workflow') + '\\nNode: ' + ($json.execution?.lastNodeExecuted || $json.trigger?.error?.node?.name || 'Trigger') + '\\nExecution: ' + ($json.execution?.id || 'not saved') + '\\n' + ($json.execution?.url || 'https://liamszefner.app.n8n.cloud') + '\\nOpen the execution to inspect the error. Follow docs/demo.md for the labelled failure test.' }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "webhookId": "9b604e0c-dc9b-41f1-aadc-532931856d25",
+      "credentials": {
+        "telegramApi": {
+          "id": "GFEJJBZ8CxpeEtYo",
+          "name": "AI Ship Log Telegram"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Workflow Failed": {
+      "main": [
+        [
+          {
+            "node": "Notify Liam",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "active": true,
+  "versionId": "1d4a1fc4-1e3f-4251-8b4a-7e65778e3100",
+  "activeVersionId": "1d4a1fc4-1e3f-4251-8b4a-7e65778e3100",
+  "nodeGroups": []
+}

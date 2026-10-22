@@ -2,6 +2,6 @@
   "name": "codex-28-challenge",
   "version": "1.0.0",
   "private": true,
-  "scripts": { "dev": "next dev --port 3100", "build": "next build", "start": "next start --port 3100" },
+  "scripts": { "dev": "next dev --port 3100", "build": "next build", "start": "next start --port 3100", "test": "node lib/challenge.test.mjs && node tests/workflows.test.mjs" },
   "dependencies": { "next": "16.4.0", "react": "19.3.0", "react-dom": "19.3.0" }
 }
