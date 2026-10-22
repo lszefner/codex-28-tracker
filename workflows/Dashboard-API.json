@@ -1,0 +1,263 @@
+{
+  "id": "wPSgfypUvRgrTUWe",
+  "name": "Codex News – Dashboard API",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "codex-28",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2c93bb45-ed31-4752-bee2-1b90c91bfd49",
+      "name": "GET /codex-28",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        304
+      ],
+      "webhookId": "77c69c2a-f1e5-4257-a9cf-14996e8a267a"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "IQcKGlZShpvUyCBa",
+          "cachedResultName": "codex28_announcements"
+        },
+        "returnAll": true
+      },
+      "id": "af53d8f2-d8a8-4335-8a83-96fdac0cd20e",
+      "name": "Get Cached Records",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        304
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "iQwiKRJrL4O2QFgQ",
+          "cachedResultName": "codex28_sync_state"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "state_key",
+              "keyValue": "main"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "id": "7e9cd899-6e48-422c-aecc-b79738383aa8",
+      "name": "Get Sync State",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        304
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const HOSTS = ['x.com', 'twitter.com', 'codex-resets.com'];\nfunction validUrl(u) {\n  return typeof u === 'string' && /^https:\\/\\/x\\.com\\/thsottiaux\\/status\\/\\d+$/.test(u) ? u : null;\n}\nfunction iso(v) {\n  if (!v) return null;\n  const d = new Date(v);\n  return isNaN(d.getTime()) ? null : d.toISOString();\n}\nlet rows = [];\nlet state = {};\ntry { rows = $('Get Cached Records').all().map(i => i.json).filter(r => r && r.record_key && !r.error); } catch (e) { rows = []; }\ntry { state = ($('Get Sync State').all().map(i => i.json).find(r => r && r.state_key === 'main')) || {}; } catch (e) { state = {}; }\n\nconst entries = [], resets = [], updates = [];\nconst seen = { entry: new Set(), reset: new Set(), update: new Set() };\nfor (const r of rows) {\n  const id = String(r.entry_id || '');\n  const url = r.author === 'thsottiaux' && /^https:\\/\\/(?:www\\.)?(?:x\\.com|twitter\\.com)\\/thsottiaux\\/status\\/\\d+$/.test(r.url || '') ? validUrl(r.url) : null;\n  if (!id || !url || !seen[r.record_type] || seen[r.record_type].has(id)) continue;\n  seen[r.record_type].add(id);\n  if (r.record_type === 'entry') {\n    const day = Number(r.day);\n    if (!Number.isInteger(day) || day < 1 || day > 28) continue;\n    entries.push({ id, day, kind: r.kind === 'reset' ? 'reset' : 'improvement', title: r.title || '', summary: r.summary || '', url, _o: Number(r.sort_order) || 0 });\n  } else if (r.record_type === 'reset') {\n    resets.push({ id, kind: r.kind === 'banked' ? 'banked' : 'regular', announcedAt: iso(r.announced_at), url });\n  } else if (r.record_type === 'update') {\n    const kind = ['post', 'improvement', 'reset'].includes(r.kind) ? r.kind : 'post';\n    updates.push({ id, author: r.author || '', lab: r.lab || '', kind, title: r.title || '', summary: r.summary || '', announcedAt: iso(r.announced_at), url });\n  }\n}\nentries.sort((a, b) => a.day - b.day || a._o - b._o);\nfor (const e of entries) delete e._o;\nconst byDateDesc = (a, b) => String(b.announcedAt || '').localeCompare(String(a.announcedAt || ''));\nresets.sort(byDateDesc);\nupdates.sort(byDateDesc);\n\nconst populated = entries.length + resets.length + updates.length > 0;\nconst base = { version: 1, startDate: '2026-10-05', timezone: 'America/Los_Angeles' };\nconst source = 'https://codex-resets.com/tibo-28';\nconst body = populated\n  ? { ...base, syncedAt: iso(state.synced_at) || iso(rows.map(r => r.synced_at).sort().pop()), entries, resets, updates, source }\n  : { ...base, error: 'unavailable', syncedAt: null, entries: [], resets: [], updates: [], source };\nreturn [{ json: { populated, body } }];"
+      },
+      "id": "5ea83bfe-91b4-4e6b-ad81-98e262b1cdcf",
+      "name": "Build Dashboard JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "pop",
+              "leftValue": "={{ $json.populated }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "70cb9eed-8f0a-4074-8f51-1ac2185aae99",
+      "name": "Cache Populated?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json; charset=utf-8"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "public, max-age=60"
+              }
+            ]
+          }
+        }
+      },
+      "id": "879987b0-e69a-46e9-b5d2-401a53f374c4",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        720,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "responseCode": 503,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json; charset=utf-8"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              }
+            ]
+          }
+        }
+      },
+      "id": "7b1d87d9-43a6-4282-8149-5817321f8697",
+      "name": "Respond 503",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        720,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "GET /codex-28": {
+      "main": [
+        [
+          {
+            "node": "Get Cached Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Cached Records": {
+      "main": [
+        [
+          {
+            "node": "Get Sync State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Sync State": {
+      "main": [
+        [
+          {
+            "node": "Build Dashboard JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Dashboard JSON": {
+      "main": [
+        [
+          {
+            "node": "Cache Populated?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cache Populated?": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 503",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "active": true,
+  "versionId": "4203158b-0292-4175-a980-b7ebd4ba7ff8",
+  "activeVersionId": "4203158b-0292-4175-a980-b7ebd4ba7ff8",
+  "nodeGroups": []
+}

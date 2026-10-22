@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { challengeDay, dayDate } from '../lib/challenge.mjs';
 import ResetHistory from './reset-history';
 
@@ -8,10 +9,20 @@ function Icon({ type }) {
 }
 
 export default function Dashboard({ data, mode, bot }) {
+  const router = useRouter();
   const [now, setNow] = useState(null);
   const [filter, setFilter] = useState('all');
   const [light, setLight] = useState(false);
   useEffect(() => { setNow(new Date()); const timer = setInterval(() => setNow(new Date()), 60000); return () => clearInterval(timer); }, []);
+  useEffect(() => {
+    const refresh = () => { if (document.visibilityState === 'visible') router.refresh(); };
+    const timer = setInterval(refresh, 60000);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, [router]);
   const actualDay = now ? challengeDay(now) : null;
   const current = actualDay === null ? null : Math.min(28, Math.max(1, actualDay));
   const availableDays = current ? Math.max(current, ...data.entries.map(e => e.day)) : Math.max(...data.entries.map(e => e.day));
@@ -32,7 +43,7 @@ export default function Dashboard({ data, mode, bot }) {
         <section id="daily-log" aria-labelledby="log-title"><div className="log-heading"><h2 id="log-title">Daily log</h2><div className="legend"><span><i className="marker improvement" /> Improvement</span><span><i className="marker reset" /> Reset</span></div></div>
           <div className="days" aria-label="All 28 days">{Array.from({ length: 28 }, (_, i) => i + 1).map(day => { const entries = data.entries.filter(e => e.day === day); const hasI = entries.some(e => e.kind === 'improvement'); const hasR = entries.some(e => e.kind === 'reset'); return <button key={day} disabled={day > availableDays} onClick={() => jump(day)} className={`${hasI ? 'has-improvement' : ''} ${hasR ? 'has-reset' : ''} ${hasI && hasR ? 'both' : ''} ${day === current ? 'today' : ''}`} aria-label={`Day ${day}, ${dateLabel(day)}: ${hasI && hasR ? 'improvement and reset' : hasI ? 'improvement' : hasR ? 'reset' : day > availableDays ? 'upcoming' : 'no announcement'}`} aria-current={day === current ? 'date' : undefined}>{day}</button>; })}</div>
           <div className="toolbar"><div className="filters" aria-label="Filter announcements">{['all', 'improvement', 'reset'].map(value => <button key={value} aria-pressed={filter === value} onClick={() => setFilter(value)}>{value === 'all' ? 'All updates' : value === 'reset' ? 'Resets' : 'Improvements'}</button>)}</div><span className="coverage">{data.entries.length} announcements</span></div>
-          <p className={`feed-status ${mode}`} role="status">{mode === 'preview' ? 'Preview · saved Oct 12, 2026. Live feed is being connected.' : mode === 'unavailable' ? 'Live feed unavailable · showing saved Oct 12 data. Reload to retry.' : `Synced ${new Date(data.syncedAt).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })} PT`}</p>
+          <p className={`feed-status ${mode}`} role="status">{mode === 'preview' ? 'Preview · saved Oct 12, 2026. Live feed is being connected.' : mode === 'unavailable' ? 'Live feed unavailable · showing saved Oct 12 data. Retrying automatically.' : `Synced ${new Date(data.syncedAt).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })} PT`}</p>
           <div className="log">{days.map(day => { const entries = data.entries.filter(e => e.day === day && (filter === 'all' || e.kind === filter)); if (!entries.length && filter !== 'all') return null; return <details className="day-row" id={`day-${day}`} key={day} tabIndex={-1}><summary><div className="day-label"><h3>Day {String(day).padStart(2, '0')}</h3><span>{dateLabel(day)}</span></div><div className="entry-headlines">{entries.length ? entries.map(e => <div key={e.id}><i className={`marker ${e.kind}`} /><span>{e.title}</span></div>) : <span className="waiting">{day === current ? 'Waiting for Tibo' : 'No announcement recorded'}</span>}</div>{entries.length ? <span className="expand"><Icon type="chevron" /></span> : null}</summary><div className="day-body">{entries.length ? entries.map(e => <article key={e.id}><span className={`kind ${e.kind}`}>{e.kind === 'reset' ? 'Reset' : 'Improvement'}</span><h4>{e.title}</h4><p>{e.summary}</p><a href={e.url} target="_blank" rel="noreferrer">Read original post ↗</a></article>) : <p>No update is recorded in this feed yet. This does not confirm that nothing shipped.</p>}</div></details>; })}</div>
           {filter !== 'all' && !data.entries.some(e => e.kind === filter) ? <p>No matching announcements yet.</p> : null}
         </section>

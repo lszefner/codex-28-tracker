@@ -1,0 +1,964 @@
+{
+  "id": "ofbDds5WWet8qEjg",
+  "name": "Codex News – Collector",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "2619c6e5-c094-485b-93b5-c3795141565b",
+      "name": "Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "FERgY06D2N26gkmE",
+          "cachedResultName": "Codex News – Fetch sources"
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "838304eb-c10b-446f-9174-b60e3e0723fd",
+      "name": "Run Fetch Sources",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        528
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {},
+      "id": "727ea457-0aa1-4479-876d-c26843b53e5d",
+      "name": "Run Manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        48,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ok",
+              "leftValue": "={{ $json.ok === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d0a2c899-54a7-4d49-b332-39ba631101c4",
+      "name": "Fetch OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "IQcKGlZShpvUyCBa",
+          "cachedResultName": "codex28_announcements"
+        },
+        "returnAll": true
+      },
+      "id": "6b28a825-6946-42c6-a70f-39711e338768",
+      "name": "Get Cached Records",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        528
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const fetched = $('Run Fetch Sources').first().json;\nconst cached = $input.all().map(i => i.json).filter(r => r && r.record_key);\nconst byKey = {};\nfor (const r of cached) byKey[r.record_key] = r;\nconst firstRun = cached.length === 0;\nconst authorsWithPosts = new Set(cached.filter(r => r.record_type === 'update' && r.kind === 'post').map(r => r.author));\nconst now = new Date().toISOString();\n\nconst rows = [];\nconst seenKeys = new Set();\nfunction push(r) {\n  const key = r.record_type + ':' + r.entry_id;\n  if (seenKeys.has(key)) return;\n  seenKeys.add(key);\n  const prev = byKey[key];\n  const isNew = !prev;\n  let seeded = false;\n  if (isNew) {\n    seeded = firstRun || (r.record_type === 'update' && r.kind === 'post' && !authorsWithPosts.has(r.author));\n  } else {\n    seeded = prev.seeded === true;\n  }\n  rows.push({ json: {\n    record_key: key,\n    record_type: r.record_type,\n    entry_id: r.entry_id,\n    day: r.day ?? null,\n    kind: r.kind || '',\n    title: r.title || '',\n    summary: r.summary || '',\n    url: r.url,\n    author: r.author || '',\n    lab: r.lab || '',\n    announced_at: r.announced_at || '',\n    sort_order: r.sort_order ?? null,\n    seeded,\n    first_seen_at: isNew ? now : (prev.first_seen_at || now),\n    synced_at: now,\n    is_new: isNew,\n  } });\n}\n\nfor (const e of fetched.entries || []) {\n  if (!e || !e.id || !e.url) continue;\n  push({ record_type: 'entry', entry_id: String(e.id), day: e.day, kind: e.kind, title: e.title, summary: e.summary, url: e.url, author: 'thsottiaux', lab: 'OpenAI', announced_at: new Date(Number((BigInt(e.id) >> 22n) + 1288834974657n)).toISOString(), sort_order: e.sortOrder });\n}\nfor (const r of fetched.resets || []) {\n  if (!r || !r.id || !r.url) continue;\n  push({ record_type: 'reset', entry_id: String(r.id), kind: r.kind, title: 'Codex usage limits reset (' + r.kind + ')', summary: '', url: r.url, author: 'thsottiaux', lab: 'OpenAI', announced_at: r.announcedAt || '' });\n}\nfor (const u of fetched.updates || []) {\n  if (!u || !u.id || !u.url) continue;\n  push({ record_type: 'update', entry_id: String(u.id), kind: u.kind, title: u.title, summary: u.summary, url: u.url, author: u.author, lab: u.lab, announced_at: u.announcedAt || '' });\n}\nreturn rows;"
+      },
+      "id": "57d38324-846e-48f4-bb21-2f0f7f408eef",
+      "name": "Diff & Build Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "IQcKGlZShpvUyCBa",
+          "cachedResultName": "codex28_announcements"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "record_key",
+              "keyValue": "={{ $json.record_key }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "record_key": "={{ $json.record_key }}",
+            "record_type": "={{ $json.record_type }}",
+            "entry_id": "={{ $json.entry_id }}",
+            "day": "={{ $json.day }}",
+            "kind": "={{ $json.kind }}",
+            "title": "={{ $json.title }}",
+            "summary": "={{ $json.summary }}",
+            "url": "={{ $json.url }}",
+            "author": "={{ $json.author }}",
+            "lab": "={{ $json.lab }}",
+            "announced_at": "={{ $json.announced_at }}",
+            "sort_order": "={{ $json.sort_order }}",
+            "seeded": "={{ $json.seeded }}",
+            "first_seen_at": "={{ $json.first_seen_at }}",
+            "synced_at": "={{ $json.synced_at }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "record_key",
+              "displayName": "record_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "record_type",
+              "displayName": "record_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entry_id",
+              "displayName": "entry_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "day",
+              "displayName": "day",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "kind",
+              "displayName": "kind",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "author",
+              "displayName": "author",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lab",
+              "displayName": "lab",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "announced_at",
+              "displayName": "announced_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sort_order",
+              "displayName": "sort_order",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "seeded",
+              "displayName": "seeded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "first_seen_at",
+              "displayName": "first_seen_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "synced_at",
+              "displayName": "synced_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ec750fd8-df48-4b68-a969-fd517aaf9b20",
+      "name": "Upsert Records",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1296,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "iQwiKRJrL4O2QFgQ",
+          "cachedResultName": "codex28_sync_state"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "state_key",
+              "keyValue": "main"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "state_key": "main",
+            "synced_at": "={{ $now.toUTC().toISO() }}",
+            "entry_count": "={{ $('Diff & Build Rows').all().length }}",
+            "last_status": "={{ ($('Run Fetch Sources').first().json.errors || []).length ? 'partial' : 'ok' }}",
+            "last_error": "={{ ($('Run Fetch Sources').first().json.errors || []).join(' | ').slice(0, 1000) }}",
+            "latest_reset_id": "={{ ($('Run Fetch Sources').first().json.status || {}).latestResetId || '' }}",
+            "latest_reset_at": "={{ ($('Run Fetch Sources').first().json.status || {}).latestResetAt || '' }}",
+            "total_resets": "={{ ($('Run Fetch Sources').first().json.status || {}).totalResets || 0 }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "state_key",
+              "displayName": "state_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "synced_at",
+              "displayName": "synced_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entry_count",
+              "displayName": "entry_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_status",
+              "displayName": "last_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_error",
+              "displayName": "last_error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "latest_reset_id",
+              "displayName": "latest_reset_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "latest_reset_at",
+              "displayName": "latest_reset_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_resets",
+              "displayName": "total_resets",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dcb2cfb3-d597-48a8-a6da-3309aa9b6d63",
+      "name": "Update Sync State",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1520,
+        528
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $('Diff & Build Rows').all().map(i=>i.json);\nconst byId = new Map();\nfor (const r of rows) {\n  if (r.seeded || r.author !== 'thsottiaux') continue;\n  if (r.record_type !== 'reset' && !(r.record_type === 'entry' && r.kind === 'improvement')) continue;\n  if (!byId.has(r.entry_id) || r.record_type === 'reset') byId.set(r.entry_id,r);\n}\nconst esc = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nreturn [...byId.values()].map(r=>({json:{entry_id:r.entry_id, first_seen_at:r.first_seen_at,\n  category:r.record_type==='reset'?'resets':'improvements',\n  text:(r.record_type==='reset'?'Codex limits just reset ('+esc(r.kind)+').':'New Codex improvement: '+esc(r.title))+'\\n'+esc(r.url)}}));"
+      },
+      "id": "a2b480c5-942a-41b7-b939-c98dbd0cd1db",
+      "name": "Collect New Alerts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "7kb07hwEztBA2TAN",
+          "cachedResultName": "codex28_subscribers"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "subscribed",
+              "condition": "isTrue"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "id": "496e692b-550d-4cb8-bb1b-df022b5050ee",
+      "name": "Get Active Subscribers",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        624
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "BunLrwZATjkMj5wj",
+          "cachedResultName": "codex28_deliveries"
+        },
+        "returnAll": true
+      },
+      "id": "23a82b86-5c76-4641-ba74-7d8b7acfc4cf",
+      "name": "Get Past Deliveries",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1824,
+        624
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const sent = new Set($input.all().map(i=>i.json).filter(r=>r.status==='sent').map(r=>r.delivery_key));\nconst subs = $('Get Active Subscribers').all().map(i=>i.json).filter(s=>s.chat_id && s.subscribed===true);\nconst alerts = $('Collect New Alerts').all().map(i=>i.json);\nconst out=[]; const seen=new Set();\nfor (const s of subs) for (const a of alerts) {\n  if (s.alert_mode && s.alert_mode!=='all' && s.alert_mode!==a.category) continue;\n  if (s.subscribed_at && new Date(a.first_seen_at)<new Date(s.subscribed_at)) continue;\n  const key=String(s.chat_id)+':'+a.entry_id;\n  if(sent.has(key)||seen.has(key))continue;\n  seen.add(key);out.push({json:{delivery_key:key,chat_id:String(s.chat_id),entry_id:a.entry_id,text:a.text}});\n}\nreturn out;"
+      },
+      "id": "1077c0cb-e9ba-478e-8f72-9949e8352957",
+      "name": "Build Pending Deliveries",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "202341a4-b695-43d8-a6eb-2380ce73458b",
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2272,
+        624
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "webhookId": "146195fe-cb00-451a-8e7f-4aaa9b6951f7",
+      "onError": "continueErrorOutput",
+      "credentials": {
+        "telegramApi": {
+          "id": "GFEJJBZ8CxpeEtYo",
+          "name": "AI Ship Log Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "BunLrwZATjkMj5wj",
+          "cachedResultName": "codex28_deliveries"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "delivery_key": "={{ $('Build Pending Deliveries').item.json.delivery_key }}",
+            "chat_id": "={{ $('Build Pending Deliveries').item.json.chat_id }}",
+            "entry_id": "={{ $('Build Pending Deliveries').item.json.entry_id }}",
+            "status": "sent",
+            "delivered_at": "={{ $now.toUTC().toISO() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "delivery_key",
+              "displayName": "delivery_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entry_id",
+              "displayName": "entry_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "delivered_at",
+              "displayName": "delivered_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fcbba8ab-e5c2-40d4-87d5-d0f078e0fdb7",
+      "name": "Log Sent Delivery",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2496,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "BunLrwZATjkMj5wj",
+          "cachedResultName": "codex28_deliveries"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "delivery_key": "={{ $('Build Pending Deliveries').item.json.delivery_key }}",
+            "chat_id": "={{ $('Build Pending Deliveries').item.json.chat_id }}",
+            "entry_id": "={{ $('Build Pending Deliveries').item.json.entry_id }}",
+            "status": "failed",
+            "delivered_at": "={{ $now.toUTC().toISO() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "delivery_key",
+              "displayName": "delivery_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entry_id",
+              "displayName": "entry_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "delivered_at",
+              "displayName": "delivered_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6ccb8ec9-f9f9-49aa-a92f-8e9119e2aab6",
+      "name": "Log Failed Delivery",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2496,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "iQwiKRJrL4O2QFgQ",
+          "cachedResultName": "codex28_sync_state"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "state_key",
+              "keyValue": "main"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "state_key": "main",
+            "last_status": "error",
+            "last_error": "={{ (($json.errors || []).join(\" | \") || \"fetch failed\").slice(0, 1000) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "state_key",
+              "displayName": "state_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_status",
+              "displayName": "last_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_error",
+              "displayName": "last_error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "800ee5e6-5810-47b3-b851-e556691df536",
+      "name": "Record Fetch Error",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        528
+      ]
+    }
+  ],
+  "connections": {
+    "Run Fetch Sources": {
+      "main": [
+        [
+          {
+            "node": "Fetch OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Manually": {
+      "main": [
+        [
+          {
+            "node": "Run Fetch Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch OK?": {
+      "main": [
+        [
+          {
+            "node": "Get Cached Records",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Fetch Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Cached Records": {
+      "main": [
+        [
+          {
+            "node": "Diff & Build Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Diff & Build Rows": {
+      "main": [
+        [
+          {
+            "node": "Upsert Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Records": {
+      "main": [
+        [
+          {
+            "node": "Update Sync State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sync State": {
+      "main": [
+        [
+          {
+            "node": "Collect New Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect New Alerts": {
+      "main": [
+        [
+          {
+            "node": "Get Active Subscribers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Subscribers": {
+      "main": [
+        [
+          {
+            "node": "Get Past Deliveries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Past Deliveries": {
+      "main": [
+        [
+          {
+            "node": "Build Pending Deliveries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Pending Deliveries": {
+      "main": [
+        [
+          {
+            "node": "Send Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Alert": {
+      "main": [
+        [
+          {
+            "node": "Log Sent Delivery",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Failed Delivery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every 15 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Run Fetch Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "active": true,
+  "versionId": "58910d8b-ff9c-4b0e-a88a-5887c6121040",
+  "activeVersionId": "58910d8b-ff9c-4b0e-a88a-5887c6121040",
+  "nodeGroups": [
+    {
+      "id": "da39a454-709b-4024-bf0f-bf4db1240c7c",
+      "name": "Refresh source data",
+      "nodeNames": [
+        "Run Fetch Sources",
+        "Fetch OK?"
+      ],
+      "description": "Pulls challenge, reset and lab posts, then checks that at least one source answered before touching the cache"
+    },
+    {
+      "id": "b782e390-b4e7-4957-9508-6c358a6dee8c",
+      "name": "Update cache",
+      "nodeNames": [
+        "Get Cached Records",
+        "Diff & Build Rows",
+        "Upsert Records",
+        "Update Sync State"
+      ],
+      "description": "Adds new records, refreshes existing ones and stamps the sync time; the first run marks history as already seen"
+    },
+    {
+      "id": "f7fa56bb-c7ef-4abc-8a2f-113e03699c83",
+      "name": "Notify subscribers",
+      "nodeNames": [
+        "Collect New Alerts",
+        "Get Active Subscribers",
+        "Get Past Deliveries",
+        "Build Pending Deliveries",
+        "Send Alert",
+        "Log Sent Delivery",
+        "Log Failed Delivery"
+      ],
+      "description": "Sends each opted-in Telegram chat every new reset or post once, with its source link, and logs each delivery"
+    }
+  ]
+}
