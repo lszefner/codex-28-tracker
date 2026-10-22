@@ -30,7 +30,7 @@ flowchart TD
   Fetch -->|"unhandled execution failure"| Errors
   API -->|"unhandled execution failure"| Errors
   Bot -->|"unhandled execution failure"| Errors
-  Demo["Failure demo: unpublished normally"] -->|"deliberate bad-URL failure"| Errors
+  Demo["Manual failure demo: no schedule"] -->|"explicit call after bad-URL error"| Errors
   Errors -->|"workflow name, failed node and execution link"| Admin["Liam's private Telegram chat"]
 ```
 
@@ -59,7 +59,7 @@ AI Answer Valid? sends accepted output to Send Answer and rejected output to Spl
 
 All external HTTP, database, Telegram, sub-workflow and model/chain nodes have Retry On Fail enabled with three total tries and a two-second wait. A request timeout does not prove that a remote action had no effect; Telegram and Apify retries can repeat an ambiguous request.
 
-The four operating workflows point to the shared Error handler. It sends only workflow metadata and an execution URL to the agreed private chat, not raw exception bodies, message contents or keys. The handler has no error workflow linked to itself.
+The four operating workflows point to the shared Error handler. It sends only workflow metadata and an execution URL to the agreed private chat, not raw exception bodies, message contents or keys. The handler has no error workflow linked to itself. A second, typed sub-workflow trigger lets the manual demo reuse its notification node. This explicit demo call is separate from the automatic Error Trigger path.
 
 Handled degradation can still produce a successful execution: an unavailable optional source records a coverage warning; rejected AI output uses a fallback. Total collection-source failure records the status and reaches Stop Failed Collection, producing a failed execution and an error alert.
 

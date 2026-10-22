@@ -3,26 +3,6 @@
   "name": "Codex News – Failure demo",
   "nodes": [
     {
-      "id": "9a493944-e2c0-44c5-8dd8-7a681a0d2aba",
-      "name": "Publish to test - every minute",
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.4,
-      "position": [
-        0,
-        0
-      ],
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "field": "minutes",
-              "minutesInterval": 1
-            }
-          ]
-        }
-      }
-    },
-    {
       "id": "16079edc-afff-4f52-9f4d-6ac7763febe6",
       "name": "Intentional Bad URL",
       "type": "n8n-nodes-base.httpRequest",
@@ -40,7 +20,7 @@
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 2000,
-      "onError": "stopWorkflow"
+      "onError": "continueErrorOutput"
     },
     {
       "id": "5467f34c-c42d-40c9-a864-6a879f49de24",
@@ -48,7 +28,7 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        448,
+        672,
         96
       ],
       "parameters": {
@@ -57,14 +37,69 @@
     },
     {
       "id": "be565927-662a-45c6-a234-7f6c8f3c99d1",
-      "name": "Editor test - no Telegram alert",
+      "name": "Run Failure Demo",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
         0,
-        192
+        96
       ],
       "parameters": {}
+    },
+    {
+      "id": "780eabb4-f123-4c66-91b3-936283f116cd",
+      "name": "Send Demo Failure Alert",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        448,
+        224
+      ],
+      "parameters": {
+        "source": "database",
+        "mode": "once",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "4kOLlblt8pZ8LA8l",
+          "cachedResultName": "Codex News – Error handler"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow": "={{ { id: $workflow.id, name: $workflow.name + ' (EXPECTED MANUAL DEMO)' } }}",
+            "execution": "={{ { id: $execution.id, lastNodeExecuted: 'Intentional Bad URL', url: 'https://liamszefner.app.n8n.cloud/workflow/' + $workflow.id + '/executions/' + $execution.id } }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "type": "object",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "execution",
+              "displayName": "execution",
+              "type": "object",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
     }
   ],
   "connections": {
@@ -76,10 +111,17 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Send Demo Failure Alert",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
-    "Publish to test - every minute": {
+    "Run Failure Demo": {
       "main": [
         [
           {
@@ -90,11 +132,11 @@
         ]
       ]
     },
-    "Editor test - no Telegram alert": {
+    "Send Demo Failure Alert": {
       "main": [
         [
           {
-            "node": "Intentional Bad URL",
+            "node": "Stop Expected Demo",
             "type": "main",
             "index": 0
           }
@@ -110,7 +152,7 @@
     "executionTimeout": 60
   },
   "active": false,
-  "versionId": "1a597875-6cf2-46f5-abd8-eec0fb92e17f",
+  "versionId": "94930fe9-6d7f-40c5-9d07-19a7aba66dbb",
   "activeVersionId": null,
   "nodeGroups": []
 }

@@ -20,27 +20,29 @@ Use the current committed JSON in `workflows/` and the published workflows. Neve
 | 2:25–3:05 | `/today banana` and `/alerts resets` | Invalid input gets usage guidance; a second routing path updates preferences |
 | 3:05–3:45 | Subscriber table, announcement key and delivery key | State persists across executions; upserts and saved keys prevent routine duplicates |
 | 3:45–4:35 | Fetch input, AI prompt, validator and fallback arrows | Defined inputs, bounded output, allowed source URLs and fallback behavior |
-| 4:35–5:35 | Failure execution, handler and received alert | Deliberate bad URL, retries, failed execution, linked Error Trigger, workflow name and execution URL |
+| 4:35–5:35 | Failure execution, handler and received alert | Manual Trigger, bad URL, retries, explicit alert sub-workflow, then Stop And Error; distinguish this from automatic Error Trigger handling |
 | 5:35–6:00 | Limitations | Upstream delay, ten-post window, no perfect exactly-once send guarantee, Cloud deployment |
 
 Specifications/architecture stay below two minutes; total stays between five and seven minutes.
 
 ## Repeating the controlled failure
 
-The isolated Failure demo uses a reserved `.invalid` hostname. It cannot write announcements or send news alerts. It runs every minute **while published**, so leave it unpublished between demonstrations.
+The isolated Failure demo starts with a **Manual Trigger** and uses a reserved `.invalid` hostname. It has no schedule and cannot write announcements or send news alerts.
 
 Using the n8n UI:
-1. Open **Codex News – Failure demo** and click **Publish**.
-2. Wait for the next scheduled run (about one minute, plus retries). Do not click **Execute Workflow** to test the automatic alert.
-3. Open **Executions**: the automatic run should fail at **Intentional Bad URL**.
-4. Confirm the matching failure alert in your private Codex News Telegram chat, and the successful **Codex News – Error handler** execution.
-5. **Unpublish** the Failure demo immediately afterward. Leaving it published sends another alert every minute.
+1. Open **Codex News – Failure demo** and click **Execute Workflow**.
+2. **Intentional Bad URL** exhausts its three tries and sends the failure through its error output.
+3. **Send Demo Failure Alert** calls the shared Error handler as a sub-workflow, passing the real execution ID, URL and failing node. The workflow name is labelled **EXPECTED MANUAL DEMO**.
+4. Confirm the alert in your private Codex News Telegram chat.
+5. **Stop Expected Demo** finishes the run with the expected error. No publish/unpublish cycle is needed.
 
-For an immediate test using the n8n MCP, publish workflow `Ki7vTGUA0JqJ0ysl`, execute with `executionMode: "production"` and `triggerNodeName: "Publish to test - every minute"`, inspect both executions and the private alert, then unpublish in all cases.
+Using the n8n MCP: execute workflow `Ki7vTGUA0JqJ0ysl` with `executionMode: "manual"` and `triggerNodeName: "Run Failure Demo"`.
 
-You can ask Codex: “Run the isolated failure demo through n8n MCP, verify the private error alert, and unpublish the demo afterward.”
+**What this demonstrates:** manual execution, retries, an error branch, a typed sub-workflow call, shared Telegram delivery, and Stop And Error. It explicitly invokes the alert workflow; it does not claim that a manual execution fires n8n's Error Trigger. The four operating workflows still use that Error Trigger for automatic production failures. Earlier production executions 406/407 verified that separate path.
 
-**Why the editor button does not send the alert:** n8n's Error Trigger runs for automatic/production failures, not manual editor executions. The **Editor test - no Telegram alert** trigger is only for inspecting the deliberate failure. Manual executions 401–403 confirmed this distinction; no handler executions were expected for them. Publishing alone previously also waited until January 1; the revised one-minute schedule makes the UI demonstration repeatable.
+n8n rejects publishing a manual-only workflow because it has no activatable trigger. It runs from the editor without publishing. Manual executions 401–403 on the old graph had no explicit alert branch, so no notification was expected. The removed schedule is no longer needed.
+
+Live verification: manual execution **411** reached the alert sub-workflow **412**, Telegram accepted the message, the alert was visible in the Mac app, and the demo ended at **Stop Expected Demo** with its expected error.
 
 Do not damage a live credential or edit the operating Collector to demonstrate a failure.
 

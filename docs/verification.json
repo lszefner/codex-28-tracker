@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-22T12:46:38.463Z",
+  "verifiedAt": "2026-10-22T12:51:13.748Z",
   "scope": "n8n Cloud; Docker self-hosting excluded by user",
   "collection": {
     "executionId": "393",
@@ -28,6 +28,7 @@
     "versionId": "1a597875-6cf2-46f5-abd8-eec0fb92e17f",
     "automaticScheduleVerified": true,
     "intervalMinutesWhilePublished": 1,
+    "historicalProof": "Earlier scheduled version; replaced by the manual-only demo",
     "unpublishedAfterVerification": true,
     "manualEditorRunsDoNotAlert": [
       "401",
@@ -63,6 +64,20 @@
     "cachingQuestion": { "executionId": "397", "status": "success", "schemaAccepted": true, "sourceUrl": "https://x.com/thsottiaux/status/2112712984644784534", "telegramAccepted": true, "visibleInChat": true },
     "invalidPageCommand": { "executionId": "400", "status": "success", "telegramAccepted": true, "visibleInChat": true, "reply": "Usage: /today or /today <positive page number>." },
     "formattingRegression": { "failedExecutionId": "398", "errorHandlerExecutionId": "399", "cause": "Unescaped usage placeholder interpreted as a Telegram HTML tag", "fix": "Reuse the existing HTML escape helper", "retryExecutionId": "400" }
+  },
+  "manualFailureDemo": {
+    "workflowId": "Ki7vTGUA0JqJ0ysl",
+    "versionId": "94930fe9-6d7f-40c5-9d07-19a7aba66dbb",
+    "executionId": "411",
+    "executionMode": "manual",
+    "status": "expected failure at Stop Expected Demo",
+    "notificationExecutionId": "412",
+    "notificationMode": "integrated",
+    "telegramAccepted": true,
+    "visibleInTelegramApp": true,
+    "scheduleRemoved": true,
+    "published": false,
+    "automaticErrorTriggerTest": false
   },
   "automatedChecks": [
     "npm test",

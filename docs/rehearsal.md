@@ -57,8 +57,8 @@ Answer in your own words. Start with what the user experiences, then identify th
 39. What is Stop And Error? Where is it used?
 40. Why can an execution be green while a source is unavailable?
 41. Demonstrate a controlled failure without changing real keys or breaking collection.
-42. Why is the failure demo normally unpublished?
-43. Why does a manual test not automatically prove the production error handler?
+42. Why does the manual-only failure demo run without publication, and why is there no schedule?
+43. How does the manual demo explicitly call the shared notification workflow, and why does that not prove the automatic Error Trigger path?
 44. How would you diagnose a missing website update or Telegram alert?
 45. What freshness delay should a user expect, including the upstream source?
 46. What happens if Tibo posts more than ten times between collections?
